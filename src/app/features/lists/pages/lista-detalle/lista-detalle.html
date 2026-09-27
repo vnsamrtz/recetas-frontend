@@ -1,0 +1,40 @@
+<div class="lista-detalle-container">
+  <button (click)="volver()">← Volver a mis listas</button>
+
+  <h1 *ngIf="lista">{{ lista.nombre }}</h1>
+
+  <div class="orden-selector">
+    <label>Ordenar por:</label>
+    <select [(ngModel)]="criterio" (change)="cambiarCriterio()">
+      <option value="manual">Orden manual</option>
+      <option value="fecha">Fecha de añadido</option>
+      <option value="alfabetico-az">Alfabético (A-Z)</option>
+      <option value="alfabetico-za">Alfabético (Z-A)</option>
+      <option value="tiempo">Tiempo de preparación</option>
+    </select>
+  </div>
+
+  <app-spinner *ngIf="cargando" mensaje="Cargando recetas..."></app-spinner>
+
+  <div class="items-grid" cdkDropList (cdkDropListDropped)="soltar($event)" *ngIf="!cargando">
+    <div class="item-card" *ngFor="let item of itemsOrdenados" cdkDrag [cdkDragDisabled]="criterio !== 'manual'">
+      <h3>{{ item.receta.titulo }}</h3>
+      <p>{{ item.receta.descripcion }}</p>
+      <p *ngIf="item.receta.tiempoPreparacion">Preparación: {{ item.receta.tiempoPreparacion }} min</p>
+      <button (click)="quitarReceta(item)">Quitar de la lista</button>
+    </div>
+  </div>
+
+  <p *ngIf="!cargando && itemsOrdenados.length === 0">Esta lista todavía no tiene recetas.</p>
+
+  <hr>
+
+  <h2>Añadir una receta</h2>
+  <div class="anadir-form">
+    <select [(ngModel)]="recetaSeleccionadaId">
+      <option [ngValue]="null">Selecciona una receta tuya...</option>
+      <option *ngFor="let receta of misRecetas" [ngValue]="receta.id">{{ receta.titulo }}</option>
+    </select>
+    <button (click)="anadirReceta()">Añadir a la lista</button>
+  </div>
+</div>

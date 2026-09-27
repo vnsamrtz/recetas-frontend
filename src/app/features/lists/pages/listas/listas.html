@@ -1,0 +1,32 @@
+<div class="listas-container">
+  <h1>Mis listas</h1>
+
+  <div class="crear-lista-form">
+    <input type="text" placeholder="Nombre de la lista..." [(ngModel)]="nuevoNombre">
+    <label>
+      <input type="checkbox" [(ngModel)]="nuevaPublica">
+      Pública
+    </label>
+    <button (click)="crearLista()">Crear lista</button>
+  </div>
+
+  <app-spinner *ngIf="cargando" mensaje="Cargando tus listas..."></app-spinner>
+
+  <div class="listas-grid" *ngIf="!cargando">
+    <div class="lista-card" *ngFor="let lista of listas">
+      <a [routerLink]="['/listas', lista.id]">
+        <h3>{{ lista.nombre }}</h3>
+      </a>
+      <span *ngIf="lista.esFavoritos" class="etiqueta-favoritos">★ Favoritos</span>
+
+      <label class="switch">
+        <input type="checkbox" [checked]="lista.publica" (change)="alternarVisibilidad(lista)">
+        {{ lista.publica ? 'Pública' : 'Privada' }}
+      </label>
+
+      <button *ngIf="!lista.esFavoritos" (click)="eliminarLista(lista)">Eliminar</button>
+    </div>
+  </div>
+
+  <p *ngIf="!cargando && listas.length === 0">No tienes ninguna lista todavía.</p>
+</div>

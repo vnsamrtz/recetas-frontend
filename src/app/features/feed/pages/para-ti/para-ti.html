@@ -1,0 +1,41 @@
+<div class="para-ti-container">
+  <h1>Para ti</h1>
+
+  <div class="modo-tabs">
+    <button [class.tab-activa]="modo === 'recetas'" (click)="cambiarModo('recetas')">Recetas</button>
+    <button [class.tab-activa]="modo === 'personas'" (click)="cambiarModo('personas')">Personas</button>
+  </div>
+
+  <div class="buscador">
+    <input
+      type="text"
+      [placeholder]="modo === 'recetas' ? 'Buscar recetas...' : 'Buscar personas...'"
+      [(ngModel)]="terminoBusqueda"
+      (keyup.enter)="buscar()">
+    <button (click)="buscar()">Buscar</button>
+    <button *ngIf="buscando" (click)="limpiarBusqueda()">Limpiar</button>
+  </div>
+
+  <app-spinner *ngIf="cargando && modo === 'recetas'" mensaje="Cargando recetas..."></app-spinner>
+
+  <div class="recetas-grid" *ngIf="modo === 'recetas' && !cargando">
+    <a [routerLink]="['/recetas', receta.id]" class="receta-card" *ngFor="let receta of recetas">
+      <h3>{{ receta.titulo }}</h3>
+      <p>{{ receta.descripcion }}</p>
+      <p><strong>Autor:</strong> {{ receta.autorNombre }}</p>
+    </a>
+  </div>
+
+  <p *ngIf="modo === 'recetas' && !cargando && recetas.length === 0">
+    {{ buscando ? 'No se encontraron recetas con ese término.' : 'No hay recetas recientes todavía.' }}
+  </p>
+
+  <div class="usuarios-lista" *ngIf="modo === 'personas'">
+    <a [routerLink]="['/perfil', usuario.id]" class="usuario-card" *ngFor="let usuario of usuarios">
+      <img *ngIf="usuario.fotoPerfil" [src]="'http://localhost:8080' + usuario.fotoPerfil" alt="" class="usuario-foto">
+      <span>{{ usuario.nombre }}</span>
+    </a>
+    <p *ngIf="usuarios.length === 0 && buscando">No se encontraron personas con ese nombre.</p>
+    <p *ngIf="usuarios.length === 0 && !buscando">Escribe un nombre para buscar personas.</p>
+  </div>
+</div>

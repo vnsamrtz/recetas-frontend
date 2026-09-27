@@ -1,0 +1,74 @@
+<div class="form-container">
+  <h1>{{ modoEdicion ? 'Editar receta' : 'Crear receta' }}</h1>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div>
+      <label for="titulo">Título *</label>
+      <input type="text" id="titulo" formControlName="titulo">
+    </div>
+
+    <div>
+      <label for="descripcion">Descripción</label>
+      <textarea id="descripcion" formControlName="descripcion"></textarea>
+    </div>
+
+    <div>
+      <label>Tiempo de preparación</label>
+      <div class="campo-tiempo">
+        <input type="number" min="0" placeholder="Horas" [(ngModel)]="prepHoras" [ngModelOptions]="{standalone: true}" (ngModelChange)="actualizarTiempoPreparacion()">
+        <span>h</span>
+        <input type="number" min="0" max="59" placeholder="Minutos" [(ngModel)]="prepMinutos" [ngModelOptions]="{standalone: true}" (ngModelChange)="actualizarTiempoPreparacion()">
+        <span>min</span>
+      </div>
+    </div>
+
+    <div>
+      <label>Tiempo de cocción</label>
+      <div class="campo-tiempo">
+        <input type="number" min="0" placeholder="Horas" [(ngModel)]="coccionHoras" [ngModelOptions]="{standalone: true}" (ngModelChange)="actualizarTiempoCoccion()">
+        <span>h</span>
+        <input type="number" min="0" max="59" placeholder="Minutos" [(ngModel)]="coccionMinutos" [ngModelOptions]="{standalone: true}" (ngModelChange)="actualizarTiempoCoccion()">
+        <span>min</span>
+      </div>
+    </div>
+
+    <div>
+      <label>Tiempo de reposo/enfriado</label>
+      <div class="campo-tiempo">
+        <input type="number" min="0" placeholder="Horas" [(ngModel)]="reposoHoras" [ngModelOptions]="{standalone: true}" (ngModelChange)="actualizarTiempoReposo()">
+        <span>h</span>
+        <input type="number" min="0" max="59" placeholder="Minutos" [(ngModel)]="reposoMinutos" [ngModelOptions]="{standalone: true}" (ngModelChange)="actualizarTiempoReposo()">
+        <span>min</span>
+      </div>
+    </div>
+
+    <div>
+      <label for="raciones">Raciones</label>
+      <input type="number" id="raciones" formControlName="raciones" min="1">
+    </div>
+
+    <div>
+      <label for="dificultad">Dificultad</label>
+      <select id="dificultad" formControlName="dificultad">
+        <option value="">Selecciona...</option>
+        <option value="FACIL">Fácil</option>
+        <option value="MEDIA">Media</option>
+        <option value="DIFICIL">Difícil</option>
+      </select>
+    </div>
+
+    <div>
+      <label>
+        <input type="checkbox" formControlName="publicada">
+        Publicar (visible para todos)
+      </label>
+    </div>
+
+    <p *ngIf="error" class="error">{{ error }}</p>
+
+    <button type="submit" [disabled]="enviando">
+      {{ enviando ? 'Creando...' : 'Crear receta' }}
+    </button>
+    <button type="button" (click)="cancelar()">Cancelar</button>
+  </form>
+</div>

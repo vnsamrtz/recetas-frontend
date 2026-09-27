@@ -1,0 +1,31 @@
+<div class="buscar-container">
+  <h1>Buscar recetas</h1>
+
+  <div class="filtros">
+    <input type="text" placeholder="Título..." [(ngModel)]="titulo">
+
+    <select [(ngModel)]="categoriaId">
+      <option [ngValue]="null">Todas las categorías</option>
+      <option *ngFor="let cat of categorias" [ngValue]="cat.id">{{ cat.nombre }}</option>
+    </select>
+
+    <select [(ngModel)]="dificultad">
+      <option value="">Cualquier dificultad</option>
+      <option value="FACIL">Fácil</option>
+      <option value="MEDIA">Media</option>
+      <option value="DIFICIL">Difícil</option>
+    </select>
+
+    <button (click)="buscar()">Buscar</button>
+  </div>
+
+  <div class="recetas-lista">
+    <div class="receta-card" *ngFor="let receta of resultados">
+      <h3>{{ receta.titulo }}</h3>
+      <p>{{ receta.descripcion }}</p>
+      <p><strong>Autor:</strong> {{ receta.autorNombre }}</p>
+    </div>
+  </div>
+
+  <p *ngIf="buscado && resultados.length === 0">No se han encontrado recetas con esos criterios.</p>
+</div>

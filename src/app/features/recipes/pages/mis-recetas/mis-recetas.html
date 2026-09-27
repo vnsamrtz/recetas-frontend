@@ -1,0 +1,16 @@
+<div class="mis-recetas-container">
+  <div class="header">
+    <h1>Mis recetas</h1>
+    <a [routerLink]="['/recetas/nueva']" class="boton-crear-receta">+ Crear receta</a>
+  </div>
+
+ <div class="recetas-lista">
+  <a [routerLink]="['/recetas', receta.id]" class="receta-card" *ngFor="let receta of recetas">
+    <h3>{{ receta.titulo }}</h3>
+    <p>{{ receta.descripcion }}</p>
+    <p><strong>Estado:</strong> {{ receta.publicada ? 'Pública' : 'Privada' }}</p>
+  </a>
+</div>
+
+  <p *ngIf="recetas.length === 0">Todavía no has creado ninguna receta.</p>
+</div>

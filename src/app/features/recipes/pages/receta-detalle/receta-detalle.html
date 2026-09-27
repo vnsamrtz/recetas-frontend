@@ -1,0 +1,80 @@
+<div class="detalle-container">
+  <button (click)="volver()">← Volver</button>
+
+  <app-spinner *ngIf="cargando" mensaje="Cargando receta..."></app-spinner>
+
+  <div *ngIf="error" class="mensaje-error">{{ error }}</div>
+
+  <div *ngIf="receta && !cargando">
+    <div class="detalle-header">
+      <h1>{{ receta.titulo }}</h1>
+      <button (click)="alternarFavorito()">
+        {{ esFavorita ? '★ Quitar de favoritos' : '☆ Añadir a favoritos' }}
+      </button>
+    </div>
+
+    <p class="descripcion">{{ receta.descripcion }}</p>
+
+    <div class="info-grid">
+      <p *ngIf="receta.tiempoPreparacion"><strong>Preparación:</strong> {{ receta.tiempoPreparacion }} min</p>
+      <p *ngIf="receta.tiempoCoccion"><strong>Cocción:</strong> {{ receta.tiempoCoccion }} min</p>
+      <p *ngIf="receta.tiempoReposo"><strong>Reposo/enfriado:</strong> {{ receta.tiempoReposo }} min</p>
+      <p *ngIf="receta.raciones"><strong>Raciones:</strong> {{ receta.raciones }}</p>
+      <p *ngIf="receta.dificultad"><strong>Dificultad:</strong> {{ receta.dificultad }}</p>
+    </div>
+
+    <p>
+      <strong>Autor: </strong>
+      <a [routerLink]="['/perfil', receta.autorId]">{{ receta.autorNombre }}</a>
+    </p>
+    <p><strong>Estado:</strong> {{ receta.publicada ? 'Pública' : 'Privada' }}</p>
+
+    <hr>
+
+    <h2>Añadir a una lista</h2>
+    <div class="anadir-lista-form">
+      <select [(ngModel)]="listaSeleccionadaId">
+        <option [ngValue]="null">Selecciona una lista...</option>
+        <option *ngFor="let lista of misListas" [ngValue]="lista.id">{{ lista.nombre }}</option>
+      </select>
+      <button (click)="anadirAListaSeleccionada()">Añadir</button>
+    </div>
+    <p *ngIf="mensajeListas">{{ mensajeListas }}</p>
+
+    <hr>
+
+<h2>Ingredientes</h2>
+<ul>
+  <li *ngFor="let ing of ingredientes">
+    {{ ing.descripcion }}
+    <button (click)="eliminarIngrediente(ing.id)" class="boton-pequeno">Eliminar</button>
+  </li>
+</ul>
+<p *ngIf="ingredientes.length === 0">No hay ingredientes todavía.</p>
+
+<div class="anadir-form">
+  <input type="text" placeholder="Ej: 500 ml de nata" [(ngModel)]="nuevaDescripcionIngrediente">
+  <button (click)="anadirIngrediente()">Añadir ingrediente</button>
+</div>
+
+    <hr>
+
+    <h2>Pasos</h2>
+    <ol class="pasos-lista">
+      <li *ngFor="let paso of pasos; let i = index" class="paso-item">
+        <span><strong>Paso {{ i + 1 }}:</strong> {{ paso.descripcion }}</span>
+        <button (click)="eliminarPaso(paso.id)" class="boton-eliminar-paso">Eliminar</button>
+      </li>
+    </ol>
+    <p *ngIf="pasos.length === 0">No hay pasos todavía.</p>
+
+    <div class="anadir-form">
+      <input type="text" placeholder="Descripción del paso..." [(ngModel)]="nuevaDescripcionPaso">
+      <button (click)="anadirPaso()">Añadir paso</button>
+    </div>
+
+    <hr>
+
+     <button *ngIf="receta.autorId === miUsuarioId" (click)="eliminarReceta()" class="boton-eliminar-cuenta">Eliminar receta</button>
+  </div>
+</div>

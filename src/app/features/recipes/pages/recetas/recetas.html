@@ -1,0 +1,13 @@
+<div class="header">
+  <h1>Recetas</h1>
+</div>
+
+<div class="recetas-lista">
+  <div class="receta-card" *ngFor="let receta of recetas">
+    <h3>{{ receta.titulo }}</h3>
+    <p>{{ receta.descripcion }}</p>
+    <p><strong>Autor:</strong> {{ receta.autorNombre }}</p>
+  </div>
+</div>
+
+<p *ngIf="recetas.length === 0">No hay recetas todavía.</p>

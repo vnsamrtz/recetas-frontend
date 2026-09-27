@@ -1,0 +1,35 @@
+<div class="configuracion-container">
+  <h1>Configuración</h1>
+
+  <section class="config-seccion">
+    <h2>Listas y contenido</h2>
+
+    <h3>Visibilidad de tus listas</h3>
+    <div *ngIf="cargando">Cargando...</div>
+    <div class="listas-visibilidad" *ngIf="!cargando">
+      <div class="lista-toggle" *ngFor="let lista of listas">
+        <span>{{ lista.nombre }}</span>
+        <label class="switch">
+          <input type="checkbox" [checked]="lista.publica" (change)="alternarVisibilidad(lista)">
+          {{ lista.publica ? 'Pública' : 'Privada' }}
+        </label>
+      </div>
+    </div>
+    <p *ngIf="!cargando && listas.length === 0">No tienes listas todavía.</p>
+  </section>
+
+  <hr>
+
+  <section class="config-seccion">
+    <h2>Privacidad y seguridad</h2>
+
+    <h3>Usuarios bloqueados</h3>
+    <div class="bloqueados-lista">
+      <div class="bloqueado-item" *ngFor="let bloqueo of bloqueados">
+        <span>{{ bloqueo.bloqueado.nombre }}</span>
+        <button (click)="desbloquear(bloqueo)">Desbloquear</button>
+      </div>
+    </div>
+    <p *ngIf="bloqueados.length === 0">No tienes ningún usuario bloqueado.</p>
+  </section>
+</div>

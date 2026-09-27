@@ -1,0 +1,42 @@
+<div class="modal-overlay" (click)="cerrarModal()">
+  <div class="modal-contenido" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-tabs">
+        <button [class.tab-activa]="pestana === 'seguidores'" (click)="cambiarPestana('seguidores')">
+          Seguidores ({{ seguidores.length }})
+        </button>
+        <button [class.tab-activa]="pestana === 'seguidos'" (click)="cambiarPestana('seguidos')">
+          Seguidos ({{ seguidos.length }})
+        </button>
+      </div>
+      <button class="boton-cerrar-modal" (click)="cerrarModal()">✕</button>
+    </div>
+
+    <div class="modal-body">
+      <div *ngIf="cargando">Cargando...</div>
+
+      <div *ngIf="!cargando && pestana === 'seguidores'">
+        <div class="usuario-item" *ngFor="let f of seguidores">
+          <a [routerLink]="['/perfil', f.seguidor.id]" (click)="cerrarModal()">{{ f.seguidor.nombre }}</a>
+          <div class="usuario-acciones">
+            <button *ngIf="f.seguidor.id !== miId && !yoLeSigo(f.seguidor.id)" (click)="seguir(f.seguidor.id)">Seguir</button>
+            <button *ngIf="f.seguidor.id !== miId && yoLeSigo(f.seguidor.id)" (click)="dejarDeSeguir(f.seguidor.id)" class="boton-secundario">Dejar de seguir</button>
+            <button *ngIf="usuarioId === miId" (click)="eliminarSeguidor(f.seguidor.id)" class="boton-eliminar-paso">Eliminar</button>
+          </div>
+        </div>
+        <p *ngIf="seguidores.length === 0">No hay seguidores todavía.</p>
+      </div>
+
+      <div *ngIf="!cargando && pestana === 'seguidos'">
+        <div class="usuario-item" *ngFor="let f of seguidos">
+          <a [routerLink]="['/perfil', f.seguido.id]" (click)="cerrarModal()">{{ f.seguido.nombre }}</a>
+          <div class="usuario-acciones">
+            <button *ngIf="f.seguido.id !== miId && !yoLeSigo(f.seguido.id)" (click)="seguir(f.seguido.id)">Seguir</button>
+            <button *ngIf="f.seguido.id !== miId && yoLeSigo(f.seguido.id)" (click)="dejarDeSeguir(f.seguido.id)" class="boton-secundario">Dejar de seguir</button>
+          </div>
+        </div>
+        <p *ngIf="seguidos.length === 0">No sigue a nadie todavía.</p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,93 @@
+<div class="perfil-container">
+  <app-spinner *ngIf="cargando" mensaje="Cargando perfil..."></app-spinner>
+<div *ngIf="error" class="mensaje-error">{{ error }}</div>
+
+  <div *ngIf="perfil && !cargando">
+    <div class="perfil-header">
+      <img *ngIf="perfil.fotoPerfil" [src]="'http://localhost:8080' + perfil.fotoPerfil" alt="Foto de perfil" class="foto-perfil">
+      <div>
+        <div *ngIf="perfil.esPropio && !editandoNombre" class="nombre-editable">
+  <h1>{{ perfil.nombre }}</h1>
+  <button (click)="activarEdicionNombre()" class="boton-editar-bio">Editar nombre</button>
+</div>
+
+<h1 *ngIf="!perfil.esPropio">{{ perfil.nombre }}</h1>
+
+<div *ngIf="editandoNombre" class="editar-bio-form">
+  <input type="text" [(ngModel)]="nombreTexto" placeholder="Tu nombre...">
+  <p *ngIf="errorNombre" class="error">{{ errorNombre }}</p>
+  <div class="botones-edicion">
+    <button (click)="guardarNombre()">Guardar</button>
+    <button (click)="cancelarEdicionNombre()" class="boton-secundario">Cancelar</button>
+  </div>
+</div>
+        <div *ngIf="perfil.esPropio && !editandoBio">
+  <p *ngIf="perfil.biografia">{{ perfil.biografia }}</p>
+  <p *ngIf="!perfil.biografia" class="sin-bio">Sin biografía todavía.</p>
+  <button (click)="activarEdicionBio()" class="boton-editar-bio">Editar biografía</button>
+</div>
+
+<div *ngIf="!perfil.esPropio">
+  <p *ngIf="perfil.biografia">{{ perfil.biografia }}</p>
+  <p *ngIf="!perfil.biografia" class="sin-bio">Sin biografía todavía.</p>
+</div>
+
+<div *ngIf="editandoBio" class="editar-bio-form">
+  <textarea [(ngModel)]="biografiaTexto" rows="3" placeholder="Cuenta algo sobre ti..."></textarea>
+  <div class="botones-edicion">
+    <button (click)="guardarBiografia()">Guardar</button>
+    <button (click)="cancelarEdicionBio()" class="boton-secundario">Cancelar</button>
+  </div>
+</div>
+       <p>
+  <a (click)="abrirSeguidores()" class="enlace-seguidores"><strong>{{ perfil.totalSeguidores }}</strong> seguidores</a> ·
+  <a (click)="abrirSeguidos()" class="enlace-seguidores"><strong>{{ perfil.totalSeguidos }}</strong> seguidos</a>
+</p>
+
+<app-seguidores-modal
+  *ngIf="mostrarModal"
+  [usuarioId]="perfil.id"
+  [pestanaInicial]="pestanaModal"
+  (cerrar)="cerrarModal()">
+</app-seguidores-modal>
+
+       <div *ngIf="!perfil.esPropio" class="acciones-perfil">
+  <button *ngIf="!siguiendo" (click)="seguir()" [disabled]="procesandoFollow">Seguir</button>
+  <button *ngIf="siguiendo" (click)="dejarDeSeguir()" [disabled]="procesandoFollow">Dejar de seguir</button>
+    </div>
+      </div>
+    </div>
+
+    <hr>
+
+<h2>Listas</h2>
+<div class="listas-grid">
+  <a [routerLink]="['/listas', lista.id]" class="lista-card" *ngFor="let lista of perfil.listas">
+    <h3>{{ lista.nombre }}</h3>
+    <p>{{ lista.publica ? 'Pública' : 'Privada' }}</p>
+  </a>
+</div>
+    <p *ngIf="perfil.listas.length === 0">
+      {{ perfil.esPropio ? 'No has creado ninguna lista todavía.' : 'Este usuario no tiene listas públicas.' }}
+    </p>
+
+    <hr>
+
+<h2>Recetas</h2>
+<div class="recetas-grid">
+  <a [routerLink]="['/recetas', receta.id]" class="receta-card" *ngFor="let receta of perfil.recetas">
+    <h3>{{ receta.titulo }}</h3>
+    <p>{{ receta.descripcion }}</p>
+  </a>
+</div>
+    <p *ngIf="perfil.recetas.length === 0">
+      {{ perfil.esPropio ? 'No has creado ninguna receta todavía.' : 'Este usuario no tiene recetas públicas.' }}
+    </p>
+
+    <div *ngIf="perfil.esPropio">
+      <hr>
+      <button (click)="cerrarSesion()" class="boton-cerrar-sesion">Cerrar sesión</button>
+      <button (click)="eliminarCuenta()" class="boton-eliminar-cuenta">Eliminar cuenta</button>
+    </div>
+  </div>
+</div>
